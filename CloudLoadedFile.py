@@ -63,11 +63,9 @@ def AppUpdate():
 
 
 
-def Update():
-    http = urllib3.PoolManager()
 
-    r = http.request('GET', 'https://raw.githubusercontent.com/XMSX-Designer/Python-WorkSpace/versions/Designer.py')
-    open('WorkVersion.py').write(str(r.data))
+def Update():
+    webbrowser.open('https://raw.githubusercontent.com/XMSX-Designer/Python-WorkSpace/main/CloudLoadedFile.py')
 
 
 
