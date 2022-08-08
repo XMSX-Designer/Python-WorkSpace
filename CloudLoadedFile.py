@@ -18,6 +18,7 @@ import urllib3
 global Proj_Selected,File_Selected,Loggedin,session
 Proj_Selected = ""
 File_Selected = ""
+session = 'Server NA'
 try:
     cloud_config= {
         'secure_connect_bundle': 'DB/secure-connect-designer.zip'
@@ -434,10 +435,11 @@ class Main():
     
     def Exec():
         global LoginInfo
+        Main.Base_Folders((r'Projects/',r'Projects/.Trash',r'User/',r'DB/'))
         Main.INTI(base)
         Main.Home(base)
         base.root.mainloop()
-        Main.Base_Folders((r'Projects/',r'Projects/.Trash',r'User/',r'DB/'))
+        
 
 
 
