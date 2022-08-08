@@ -7,3 +7,4 @@ Modules
 -shutil
 -webbrowser
 -cassandra
+To update the file replace only the designer.py with the new one, the file will tell you if there is any new realeses
