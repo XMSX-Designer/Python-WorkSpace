@@ -18,12 +18,15 @@ import urllib3
 global Proj_Selected,File_Selected,Loggedin,session
 Proj_Selected = ""
 File_Selected = ""
-cloud_config= {
+try:
+    cloud_config= {
         'secure_connect_bundle': 'DB/secure-connect-designer.zip'
         }
-auth_provider = PlainTextAuthProvider('yqkBNpZdOcZOWgmrIHZdPMLr', 'YBvauJmy1fy0OjF3IL7oP6BjRh0T-63ISj0RjbEMg5biQe196b+WZZlrTwp_N.EFnHQz-Hsra,pQm7lbNUMM3LF.1lGuFA7N_RWxZUP.ujlu.ppOiWsZU3kaaf1fqsHj')
-cluster = Cluster(cloud=cloud_config, auth_provider=auth_provider)
-session = cluster.connect('designer')
+    auth_provider = PlainTextAuthProvider('yqkBNpZdOcZOWgmrIHZdPMLr', 'YBvauJmy1fy0OjF3IL7oP6BjRh0T-63ISj0RjbEMg5biQe196b+WZZlrTwp_N.EFnHQz-Hsra,pQm7lbNUMM3LF.1lGuFA7N_RWxZUP.ujlu.ppOiWsZU3kaaf1fqsHj')
+    cluster = Cluster(cloud=cloud_config, auth_provider=auth_provider)
+    session = cluster.connect('designer')
+except:
+    "ignore"
 
 Loggedin=False
 
