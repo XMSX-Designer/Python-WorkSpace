@@ -7,4 +7,4 @@ Modules
 -shutil
 -webbrowser
 -cassandra
-To update the file replace only the designer.py with the new one, the file will tell you if there is any new realeses
+run python path/to/CloudExec.py in the terminal, locate the file after running it the first time and move the secure-connect-designer.zip into the DB folder | the project will update on its own
