@@ -185,7 +185,7 @@ def Update():
 class base():
     root = Tk()
     baseprojects = {}
-    Version = '0.0.1'
+    Version = '0.0.2'
 
     def Restart():
         base.root = Tk()
