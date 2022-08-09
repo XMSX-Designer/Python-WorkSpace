@@ -1,3 +1,4 @@
+
 import time
 from tkinter import *
 from tkinter.filedialog import *
@@ -48,6 +49,7 @@ def AppUpdate():
     Hintv.geometry("500x800+300+300")
     Hintv.configure(bg='#383838',highlightthickness=0)
     
+    
     Header = Label(Hintv,text="New Version Avaiable",bg='#383838',fg='white',font=('ariel',7))
     Header.place(x=60,y=10)
     Header = Label(Hintv,text='Version '+version[version_id][0]+' is avaiable',bg='#383838',fg='white',font=('ariel',5))
@@ -60,9 +62,108 @@ def AppUpdate():
     
     
     ProjCreateButton = Button(Hintv,bg='#4A4A4A',text='Update',font=('ariel',5),highlightthickness=0,borderwidth=0,fg='white',command= lambda: Update())
-    ProjCreateButton.place(x=330,y=735)        
+    ProjCreateButton.place(x=330,y=735)
+    
+            
+def DirNameLoopCheckCreate(name):
+    a = True
+    b = 0
+    while a:
+        try:    
+            os.mkdir(name+' '+str(b))
+            a = False
+        except:
+            b += 1 
+    return str(name+' '+str(b)+r'/')
+
+def OpenPreFile():
+    f = askopenfile(mode='r')
+    dir = DirNameLoopCheckCreate('Projects/Import')
+    tfile = f.name
+    cfile = list()
+    for word in enumerate(tfile):
+            if word[1]==r'/' or word[1]==r'.':
+                cfile.append(str())
+            else:
+                cfile[len(cfile)-1] += word[1]
+    cfile = cfile[len(cfile)-2]+'.'+cfile[len(cfile)-1]
+    print(cfile)
+    open(dir+cfile,mode='w').write(str(open(f.name).read()))
+    open(dir+'DateCreated.txt',mode='w').write(time.asctime())
+    open(dir+'Password.txt',mode='w').write('')
+    UpdateTo('Home')
 
 
+    
+
+def View_Trash():
+    
+    Hinttv = Toplevel(base.root)
+    Hinttv.overrideredirect(True)
+    Hinttv.title("New Version Avaiable")
+    Hinttv.geometry("700x1300+200+300")
+    Hinttv.configure(bg='black',highlightthickness=1)
+    vbar_top = Canvas(Hinttv,width=1080,height=80,bg='#383838',highlightthickness=0)
+    vbar_top.pack(pady=0, fill=BOTH)
+    vbar_midtop = Canvas(Hinttv,width=1080,height=50,bg='#4A4A4A',highlightthickness=0)
+    vbar_midtop.pack(pady=0, fill=BOTH)
+    vbar_files = Canvas(Hinttv,width=1080,height=1200,bg='black',highlightthickness=0)
+    vbar_files.pack(pady=0, fill=BOTH)
+    
+    Header = Label(vbar_top,text='Trash',bg='#383838',fg='white')
+    Header.place(x=285,y=20)
+    
+
+    TrashedFiles = {}
+    WidgetTrashedFilesHeader = {}
+    WidgetTrashedFilesPath = {}
+    WidgetTrashedFilesRestore = {}
+
+    for ba, dir, zip in os.walk('Projects/.Trash/'):
+        for file in enumerate(zip):
+            TrashedFiles[str(file[0])] = Canvas(vbar_files,width=800,height=60,bg='#4A4A4A',highlightthickness=0)
+            TrashedFiles[str(file[0])].pack(pady=15,padx=10,anchor=NW,fill=BOTH)
+            
+            WidgetTrashedFilesHeader[str(file[0])] = Label(TrashedFiles[str(file[0])], text = zip[file[0]],bg='#4A4A4A', fg='white',font=('ariel',3))
+            WidgetTrashedFilesHeader[str(file[0])].place(x=3,y=3)
+            
+            WidgetTrashedFilesPath[str(file[0])] = Label(TrashedFiles[str(file[0])], text = os.path.abspath('Projects/.Trash/'+zip[file[0]]),bg='#4A4A4A', fg='white',font=('ariel',2))
+            WidgetTrashedFilesPath[str(file[0])].place(x=13,y=30)
+            
+            WidgetTrashedFilesRestore[str(file[0])] = Button(TrashedFiles[str(file[0])], text = 'restore',bg='#383838', fg='white',font=('ariel',3),highlightthickness=0,borderwidth=0, command= lambda file='Projects/.Trash/'+zip[file[0]]: Restore(file))
+            WidgetTrashedFilesRestore[str(file[0])].place(x=550,y=0)
+            
+
+                
+
+        
+    
+def Restore(file):
+    with ZipFile(file, 'r') as zipObj:
+        tfile = tuple(file)
+        cfile = list()
+        cfile.append(str())
+        for word in enumerate(tfile):
+            if word[1]==r'/' or word[1]==r'.':
+                cfile.append(str())
+            else:
+                cfile[len(cfile)-1] += word[1]
+        for wordb,cf in enumerate(cfile):
+            if cf=='Projects' or cf=='.Trash' or cf=='zip':
+                "ignore"
+            else:
+                cfile = str(cf)+r'/'
+            
+            
+        os.mkdir('Projects/'+cfile)
+        zipObj.extractall('Projects/'+cfile)
+        os.remove(file)
+
+        UpdateTo('Home')    
+    
+    
+    
+    
 
 
 
@@ -84,7 +185,7 @@ def Update():
 class base():
     root = Tk()
     baseprojects = {}
-    Version = '0.0.1 '
+    Version = '0.0.1'
 
     def Restart():
         base.root = Tk()
@@ -117,6 +218,10 @@ def UpdateTo(memu):
        base.root.destroy()
        base.Restart()
        Main.INTI(base)
+       if memu=='Home':
+           Main.Home(base)
+       elif memu=='Ide':
+           Main.Ide(base)
        
 def CreateFile():
        global ProjNameGet_,FileNameGet_,FilePassGet_
@@ -342,6 +447,9 @@ class Main():
         Create_Project = Button(bar_midtop, text="New Project",bg='#383838',fg='white',font=("Bold", 3),command=NewProject,highlightthickness=0,borderwidth=0)
         Create_Project.place(x=0,y=0)
         
+        vtrash = Button(bar_midtop, text="Trash",bg='#383838',fg='white',font=("Bold", 3),command=View_Trash,highlightthickness=0,borderwidth=0)
+        vtrash.place(x=185,y=0)
+        
         Account = Button(bar_top, text="Account",bg='#4A4A4A',fg='white',font=("Bold", 3),command=Login,highlightthickness=0,borderwidth=0)
         Account.place(x=0,y=0)
         
@@ -351,6 +459,10 @@ class Main():
         
         Version = Label(bar_top, text=core.Version, fg='white', bg='#383838',font=("conthrax-sb", 6))
         Version.place(x=850,y=54)
+        
+        Open_Project = Button(bar_midtop, text="Import",bg='#383838',fg='white',font=("Bold", 3),command=OpenPreFile,highlightthickness=0,borderwidth=0)
+        Open_Project.place(x=324,y=0)
+        
         
         
         
